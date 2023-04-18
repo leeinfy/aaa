@@ -25,5 +25,5 @@ ssh netsoft32@client1.savitestbed.ca
 WuOi0cxd
 
 h2 tmux new-session -d -s "AAA" python3 receive.py
-h1 tmux new-session -d -s "BBB" python3 send.py
+h1 tmux new-session -d -s "BBB" python3 gNodeB_send.py
 h2 tmux attach-session -t "AAA"
