@@ -1,0 +1,66 @@
+// To get started, press Ctrl+Space to bring up the completion menu and view the available nodes.
+
+// You can also use the buttons in the sidebar to perform actions on nodes.
+// Actions currently available include:
+
+// * Enabling / disabling the node
+// * Adding the bus to a bus
+// * Removing the node
+// * Connecting ADC channels
+
+// For more help, browse the DeviceTree documentation at https://docs.zephyrproject.org/latest/guides/dts/index.html
+// You can also visit the nRF DeviceTree extension documentation at https://nrfconnect.github.io/vscode-nrf-connect/devicetree/nrfdevicetree.html
+/* Modify SPI 4 to use GPIO0 pins 8,9,10 for SCK, MOSI, and MISO respectively. */
+
+/* Modify SPI 4 to use GPIO0 pins 8,9,10 for SCK, MOSI, and MISO respectively. */
+&spi4_default {
+	group1 {
+		psels = <NRF_PSEL(SPIM_SCK, 0, 8)>,
+			<NRF_PSEL(SPIM_MISO, 0, 10)>,
+			<NRF_PSEL(SPIM_MOSI, 0, 9)>;
+	};
+};
+
+&spi4_sleep {
+	group1 {
+		psels = <NRF_PSEL(SPIM_SCK, 0, 8)>,
+			<NRF_PSEL(SPIM_MISO, 0, 10)>,
+			<NRF_PSEL(SPIM_MOSI, 0, 9)>;
+	};
+};
+
+
+/* This is needed because the default setting for UART uses GPIO0_10 and GPIO0_11 which we need to use for SPI.*/
+&gpio_fwd {
+	compatible = "nordic,nrf-gpio-forwarder";
+	status = "okay";
+	uart {
+		gpios = <&gpio1 1 0>, <&gpio1 0 0>, <&gpio0 26 0>, <&gpio0 25 0>;
+	};
+};
+
+&spi4 {
+	compatible = "nordic,nrf-spim";
+	status = "okay";
+	pinctrl-0 = <&spi4_default>;
+	pinctrl-1 = <&spi4_sleep>;
+	pinctrl-names = "default", "sleep";
+    cs-gpios = <&gpio0 11 GPIO_ACTIVE_LOW>;
+};
+
+// &spi2 {
+// 	compatible = "nordic,nrf-spim";
+// 	status = "okay";
+// 	pinctrl-0 = <&spi2_default>;
+// 	pinctrl-1 = <&spi2_sleep>;
+// 	pinctrl-names = "default", "sleep";
+//     cs-gpios = <&gpio0 12 GPIO_ACTIVE_LOW>;
+// };
+
+// &spi3{
+// 	compatible = "nordic,nrf-spim";
+// 	status = "okay";
+// 	pinctrl-0 = <&spi3_default>;
+// 	pinctrl-names = "default";
+// 	cs-gpios = <&gpio1 7 GPIO_ACTIVE_LOW>;
+// };
